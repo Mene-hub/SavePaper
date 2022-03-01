@@ -56,3 +56,5 @@ C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\obj\Debug\SavePaper.
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\obj\Debug\SavePaper.csproj.CopyComplete
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\obj\Debug\SavePaper.exe
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\obj\Debug\SavePaper.pdb
+C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Debug\Newtonsoft.Json.xml

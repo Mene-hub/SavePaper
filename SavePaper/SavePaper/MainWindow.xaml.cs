@@ -1,7 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,6 +31,9 @@ namespace SavePaper
         public MainWindow()
         {
             InitializeComponent();
+
+            FileManager.filecheck();
+            CheckVersion();
 
             //controllo se ci sono dei gruppi di scontrini già salvati
             //altrimenti visualizzo il popup per l'inserimento
@@ -354,6 +360,32 @@ namespace SavePaper
         {
             TB_Budget.Text = "";
             SettingsGrid.Visibility = Visibility.Hidden;
+        }
+
+        //metodo per il controllo della versione attuale e se disponibile un nuovo aggiornamento
+        private async void CheckVersion()
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("User-Agent", "C# console program");
+
+            var content = await client.GetStringAsync("https://api.github.com/repos/Mene-hub/SavePaper/releases");
+            //string tmp = content.Split(':')[11].Split('"')[1];
+
+            string tmp = (JsonConvert.DeserializeObject<dynamic>(content)[0].tag_name);
+
+            string projectVersion = Assembly.GetExecutingAssembly().GetName().ToString().Split('=')[1].Split(',')[0];
+            projectVersion = projectVersion.Split('.')[0] + "." + projectVersion.Split('.')[1];
+
+            if (projectVersion != tmp)
+            {
+                var Downloadoption = System.Windows.MessageBox.Show("C'è una nuova versione!\nvuoi scaricarla?", "Update " + tmp, MessageBoxButton.YesNo);
+
+                if (Downloadoption == MessageBoxResult.Yes)
+                {
+                    System.Diagnostics.Process.Start("SavePaperUpdater.exe");
+                    this.Close();
+                }
+            }
         }
     }
 }

@@ -29,6 +29,12 @@ namespace SavePaper
                 File.Create(path + fileName).Close();
         }
 
+        public static void filecheck()
+        {
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+        }
+
         //metodo per serializzare e salvare su file le lista di scontrini
         public static void salvaScontrini(List<Scontrino> scontrini, string fileName)
         {
