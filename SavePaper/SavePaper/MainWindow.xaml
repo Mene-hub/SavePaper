@@ -1,0 +1,114 @@
+﻿<Window x:Class="SavePaper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SavePaper"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="SavePaper" Height="450" Width="800" ResizeMode="NoResize">
+    <Grid Background="#FFE4E4E4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="43*"/>
+            <RowDefinition Height="376*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- scontrino -->
+        <materialDesign:Card 
+            Grid.Column="1" Background="White" 
+            Foreground="#FF232323" Margin="25" 
+            UniformCornerRadius="10" materialDesign:ShadowAssist.ShadowDepth="Depth5" 
+            Grid.RowSpan="2" Padding="20,0,0,0">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="45*"/>
+                    <RowDefinition Height="281*"/>
+                    <RowDefinition Height="50*"/>
+                </Grid.RowDefinitions>
+                <Label VerticalAlignment="Center" FontWeight="Bold" x:Name="PaperName" Grid.Row="0" Content="Nome Scontrino"/>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden">
+                    <StackPanel Grid.Row="1" HorizontalAlignment="Left" Name="PaperInList" CanVerticallyScroll="True" MaxHeight="277" Height="277" MinHeight="277" ScrollViewer.VerticalScrollBarVisibility="Hidden"/>
+                </ScrollViewer>
+
+                <Label Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Name="totPrice">Tot: 0€</Label>
+                <Button x:Name="NewPaper_BT" Grid.Row="2" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon Add}" Margin="0,0,10,5" HorizontalAlignment="Right" Click="NewPaper_BT_Click" ToolTip="Nuovo scontrino"/>
+                <Button x:Name="NDeletePaper_BT" Grid.Row="2" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon Minus}" Margin="0,0,55,5" HorizontalAlignment="Right" Click="RemovePaper" ToolTip="Cancella scontrino" Background="#FFFE3030" BorderBrush="#FFFE3030" Width="30" Height="30"></Button>
+            </Grid>
+        </materialDesign:Card>
+
+        <!-- lista scontrini -->
+        <ComboBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FFECECEC" Foreground="#DD000000" FontWeight="Bold" Name="PapersList" SelectionChanged="updatePaperlist">
+        </ComboBox>
+        <ListBox HorizontalContentAlignment="Center" Background="#FFECECEC" Grid.Row="1" Name="PaperList"/>
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1" Orientation="Horizontal">
+            <Button x:Name="DeletePapersBT" Grid.Row="1" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon Minus}" Margin="0,0,10,10" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="{x:Null}" BorderThickness="0" Foreground="#DDFFFFFF" Click="DeletePapersBT_Click" ToolTip="Cancella gruppo scontrini" Background="Red" Width="30" Height="30"/>
+            <Button x:Name="newPapersBT" Grid.Row="1" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon Add}" Margin="0,0,10,10" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="{x:Null}" BorderThickness="0" Foreground="#DD000000" Click="newPapersBT_Click" ToolTip="Nuovo gruppo scontrini" Background="White"/>
+            <Button x:Name="excelBT" Grid.Row="1" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon MicrosoftExcel}" Margin="0,0,10,10" HorizontalAlignment="Center" Click="openWithExcel" VerticalAlignment="Center" Background="#FF00A416" BorderBrush="{x:Null}" BorderThickness="0" ToolTip="Apri con Excel"></Button>
+            <Button x:Name="SpesaTotale_BT" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon Summation}" Foreground="#DDFFFFFF" Background="#FF304FFE" BorderBrush="#FF304FFE" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,10" Click="SpesaTotale_BT_Click" ToolTip="Spesa Totale"></Button>
+        </StackPanel>
+
+        <Grid Grid.RowSpan="2" Grid.ColumnSpan="2" Name="AddPapersList" Visibility="Hidden">
+            <Grid.Background>
+                <SolidColorBrush Color="Black" Opacity="0.4"/>
+            </Grid.Background>
+            <materialDesign:Card Width="300" Height="150" UniformCornerRadius="10">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold">Nome gruppo scontrini</Label>
+                    <TextBox Name="NewPapersListNameTB" Margin="0,10,0,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"></TextBox>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,10,0,0" Grid.Row="1" HorizontalAlignment="Center">
+                        <Button x:Name="CloseNewPapersBT" Content="{materialDesign:PackIcon Close}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="Close" Margin="0,0,5,0" Background="#FFF40303" BorderBrush="#FFF40303" Foreground="#DDFFFFFF" Height="30" Width="30" HorizontalAlignment="Center" VerticalAlignment="Center" Click="closeNewPapersList"/>
+                        <Button x:Name="AcceptNewPapersBT" Content="{materialDesign:PackIcon Done}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="Icon" Margin="5,0,0,0" Foreground="#DDFFFFFF" Width="30" Height="30" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" BorderBrush="#FF0078D7" Click="closeNewPapersList" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+            </materialDesign:Card>
+        </Grid>
+
+        <Grid Grid.RowSpan="2" Grid.ColumnSpan="2" Name="AddPaper" Visibility="Hidden">
+            <Grid.Background>
+                <SolidColorBrush Color="Black" Opacity="0.4"/>
+            </Grid.Background>
+            <materialDesign:Card Width="220" Height="371" UniformCornerRadius="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32*"/>
+                        <RowDefinition Height="5*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="10">
+                        <Label Margin="0,5,0,0">Motivazione</Label>
+                        <TextBox x:Name="TB_Movente"></TextBox>
+
+                        <Label Margin="0,5,0,0">Venditore</Label>
+                        <TextBox x:Name="TB_Venditore"></TextBox>
+
+                        <Label Margin="0,5,0,0">Data</Label>
+                        <DatePicker x:Name="DP_Date"></DatePicker>
+
+                        <Label Margin="0,5,0,-10">Prodotti</Label>
+                        <Label FontSize="10" Margin="0,0,0,-10" >distanzia le spese con uno spazio</Label>
+                        <Label FontSize="10" >es: pasta 5€ carne 10€</Label>
+                        <TextBox x:Name="TB_listaSpesa" MaxHeight="90" Background="White"/>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,10,0" Grid.Row="1" HorizontalAlignment="Right">
+                        <Button x:Name="closePaperBT" Content="{materialDesign:PackIcon Close}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="Close" Margin="0,0,5,0" Background="#FFF40303" BorderBrush="#FFF40303" Foreground="#DDFFFFFF" Height="30" Width="30" HorizontalAlignment="Center" VerticalAlignment="Center" Click="closeNewPaper"/>
+                        <Button x:Name="AcceptPaperBT" Content="{materialDesign:PackIcon Done}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="Icon" Margin="5,0,0,0" Foreground="#DDFFFFFF" Width="30" Height="30" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" BorderBrush="#FF0078D7" Click="closeNewPaper" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+
+    </Grid>
+</Window>
