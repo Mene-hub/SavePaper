@@ -21,6 +21,7 @@ namespace SavePaper
     {
         //lista degli scontrini aggiunti
         List<Scontrino> spese;
+
         string[] myPapers;
 
         //costruttore della window
@@ -40,6 +41,8 @@ namespace SavePaper
                 updateListBox();
             }
             PapersList.SelectedIndex = 0;
+
+            Scontrino.budget = 10;
         }
 
         //metodo che in base alla lista di scontrini (spese) svuota e riempie la list box con gli contrini aggiornati
@@ -322,6 +325,35 @@ namespace SavePaper
                         AddPapersList.Visibility = Visibility.Visible;
                 }
             }
+        }
+
+        //evento per la visualizzazione del form dei settaggi
+        private void OpenSettings(object sender, RoutedEventArgs e)
+        {
+
+            SettingsGrid.Visibility = Visibility.Visible;
+        }
+
+        //evento per la chiusura/salvataggio dei settings
+        private void closeSettings(object sender, RoutedEventArgs e)
+        {
+            string budget = TB_Budget.Text;
+            budget.Replace(" ", "");
+            budget.Replace("€", "");
+
+            if (budget!="" && double.Parse(budget) > 0 && ((Button)sender).Equals(AccepSettings))
+            {
+                clearSettings();
+            }
+            else
+                clearSettings();
+        }
+
+        //metodo per la cancellazione dei dati dal form settings
+        private void clearSettings()
+        {
+            TB_Budget.Text = "";
+            SettingsGrid.Visibility = Visibility.Hidden;
         }
     }
 }
