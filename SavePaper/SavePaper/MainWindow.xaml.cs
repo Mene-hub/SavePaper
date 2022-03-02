@@ -23,7 +23,7 @@ namespace SavePaper
     public partial class MainWindow : Window
     {
         //lista degli scontrini aggiunti
-        List<Scontrino> spese;
+        GruppoSpese spese;
 
         string[] myPapers;
 
@@ -41,14 +41,12 @@ namespace SavePaper
                 AddPapersList.Visibility = Visibility.Visible;
             else
             {
-                spese = new List<Scontrino>();
+                spese = new GruppoSpese(new List<Scontrino>());
                 myPapers = FileManager.getPapersList();
                 PapersList.ItemsSource = myPapers;
                 updateListBox();
             }
             PapersList.SelectedIndex = 0;
-
-            Scontrino.budget = 10;
         }
 
         //metodo che in base alla lista di scontrini (spese) svuota e riempie la list box con gli contrini aggiornati
@@ -57,7 +55,8 @@ namespace SavePaper
 
             ListBoxItem labelItem;
             PaperList.Items.Clear();
-            foreach (var item in spese)
+            updateBudget();
+            foreach (var item in spese.spese)
             {
                 labelItem = new ListBoxItem();
                 labelItem.Selected += LabelItem_Selected;
@@ -80,16 +79,16 @@ namespace SavePaper
         {
             //prendo il movente
             int id = PaperList.Items.IndexOf(((ListBoxItem)sender));
-            PaperName.Content = spese[id].movente;
+            PaperName.Content = spese.spese[id].movente;
 
             //faccio il conto del prezzo totale dello scontrino
-            totPrice.Content = "Tot: " + (spese[id].totCost()) + "€";
+            totPrice.Content = "Tot: " + (spese.spese[id].totCost()) + "€";
 
             Label spesa;
             PaperInList.Children.Clear();
 
             //stampo la lista dello scontrino
-            foreach (var item in spese[id].scontrino)
+            foreach (var item in spese.spese[id].scontrino)
             {
                 spesa = new Label();
                 spesa.Content = item.nome + ":      " + item.costo + "€";
@@ -111,10 +110,10 @@ namespace SavePaper
         {
             //rimpiazzo gli spazi per evitare che il nome sia composto da soli caratteri "vuoti"
             string venditore = TB_Venditore.Text;
-            venditore.Replace(" ", "");
+            venditore = venditore.Replace(" ", "");
 
             string movente = TB_Movente.Text;
-            movente.Replace(" ", "");
+            movente = movente.Replace(" ", "");
 
             string lista = TB_listaSpesa.Text;
 
@@ -131,16 +130,19 @@ namespace SavePaper
                         for (int i = 0; i < lista.Split(' ').Length; i += 2)
                         {
                             if (lista.Split(' ')[i + 1].Contains('€'))
+                            {
                                 spese_.Add(new SingolaSpesa(double.Parse(lista.Split(' ')[i + 1].Replace("€", "")), lista.Split(' ')[i]));
+                                updateBudget();
+                            }
                             else
                                 throw new Exception("errore nell'inserimento dei prezzi");
                         }
 
                         //aggiungo lo scontrino
-                        spese.Add(new Scontrino(TB_Movente.Text, TB_Venditore.Text, DP_Date.SelectedDate.Value, spese.Count));
+                        spese.spese.Add(new Scontrino(TB_Movente.Text, TB_Venditore.Text, DP_Date.SelectedDate.Value, spese.spese.Count));
                         
                         //aggiungo all'ultimo scontrino aggiunto la lista di prodotti
-                        spese.Last().addSpesa(spese_);
+                        spese.spese.Last().addSpesa(spese_);
                         updateListBox();
                         AddPaper.Visibility = Visibility.Hidden;
                     }
@@ -166,7 +168,7 @@ namespace SavePaper
             if (PapersList.Items.Count > 0 && PapersList.SelectedIndex >= 0)
             {
                 double totSpesa = 0;
-                foreach (var item in spese)
+                foreach (var item in spese.spese)
                 {
                     totSpesa += item.totCost();
                 }
@@ -179,11 +181,11 @@ namespace SavePaper
         {
 
             //richiama il metodo per il salvataggio del file, la sua formattazione il salvataggio
-            FileManager.writeExcel(spese, PapersList.SelectedItem.ToString());
+            FileManager.writeExcel(spese.spese, PapersList.SelectedItem.ToString());
 
             //controllo se è sensata l'apertura del file
             if (PapersList.Items.Count > 0 && PapersList.SelectedIndex >= 0) {
-                if (spese.Count > 0)
+                if (spese.spese.Count > 0)
                 {
                     //ricreo il path completo del file per la sua apertura
                     string fileName = FileManager.path + PapersList.SelectedItem.ToString() + ".xlsx";
@@ -208,11 +210,12 @@ namespace SavePaper
         {
             if (PapersList.SelectedItem != null)
             {
+                spese.nome = PapersList.SelectedItem.ToString();
                 spese = FileManager.loadScontrini(PapersList.SelectedItem.ToString());
-                spese.Sort((x, y) => x.dataAcquisto.CompareTo(y.dataAcquisto));
+                spese.spese.Sort((x, y) => x.dataAcquisto.CompareTo(y.dataAcquisto));
             }
             else
-                spese = new List<Scontrino>();
+                spese = new GruppoSpese();
 
             updateListBox();
             clearPaper();
@@ -299,7 +302,7 @@ namespace SavePaper
                 {
                     //rimuovo dalla lista di scontrini l'istanza riferita allo scontrino selezionato
                     int idRemoved = PaperList.Items.IndexOf(((ListBoxItem)PaperList.SelectedItem));
-                    spese.RemoveAt(idRemoved);
+                    spese.spese.RemoveAt(idRemoved);
 
                     //aggiorno la listBox in base alla lista scontrini aggiornata
                     updateListBox();
@@ -344,11 +347,15 @@ namespace SavePaper
         private void closeSettings(object sender, RoutedEventArgs e)
         {
             string budget = TB_Budget.Text;
-            budget.Replace(" ", "");
-            budget.Replace("€", "");
+            budget = budget.Replace(" ", "");
+            budget = budget.Replace("€", "");
+            budget = budget.Replace(".",",");
 
             if (budget!="" && double.Parse(budget) > 0 && ((Button)sender).Equals(AccepSettings))
             {
+                spese.setBudget(double.Parse(budget), !(bool)Toggle_Budget.IsChecked);
+                updateBudget();
+                FileManager.salvaScontrini(spese, PapersList.SelectedItem.ToString());
                 clearSettings();
             }
             else
@@ -359,6 +366,7 @@ namespace SavePaper
         private void clearSettings()
         {
             TB_Budget.Text = "";
+            Toggle_Budget.IsChecked = false;
             SettingsGrid.Visibility = Visibility.Hidden;
         }
 
@@ -386,6 +394,12 @@ namespace SavePaper
                     this.Close();
                 }
             }
+        }
+
+        //metodo usato per aggiornare il budget all'aggiunta di uno scontrino
+        private void updateBudget()
+        {
+            BudgetLB.Content = "Budget: " + (spese.budget - spese.speseTotali()) + "€";
         }
     }
 }

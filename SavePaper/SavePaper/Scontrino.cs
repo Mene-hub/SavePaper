@@ -24,9 +24,6 @@ namespace SavePaper
         //id dell'acquisto, (useless?)
         public int id;
 
-        //variabile nel caso si vogla inserire un budget
-        public static double budget;
-
         //costruttore
         public Scontrino(string movente_, string venditore_, DateTime data_,int id_)
         {

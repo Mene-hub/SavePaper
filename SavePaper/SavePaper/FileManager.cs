@@ -36,10 +36,10 @@ namespace SavePaper
         }
 
         //metodo per serializzare e salvare su file le lista di scontrini
-        public static void salvaScontrini(List<Scontrino> scontrini, string fileName)
+        public static void salvaScontrini(GruppoSpese scontrini, string fileName)
         {
             fileName += extension;
-            XmlSerializer serializer = new XmlSerializer(typeof(List<Scontrino>));
+            XmlSerializer serializer = new XmlSerializer(typeof(GruppoSpese));
             TextWriter writer = new StreamWriter(path + fileName);
 
             serializer.Serialize(writer, scontrini);
@@ -47,19 +47,19 @@ namespace SavePaper
         }
 
         //metodo per de serializzare e ritornare la lista di scontrini caricata su una lista
-        public static List<Scontrino> loadScontrini(string fileName)
+        public static GruppoSpese loadScontrini(string fileName)
         {
             fileName += extension;
 
             if (File.ReadAllBytes(path + fileName).Length == 0)
-                return new List<Scontrino>();
+                return new GruppoSpese(new List<Scontrino>());
 
-            XmlSerializer serializer = new XmlSerializer(typeof(List<Scontrino>));
-            List<Scontrino> temp;
+            XmlSerializer serializer = new XmlSerializer(typeof(GruppoSpese));
+            GruppoSpese temp;
             using (Stream reader = new FileStream(path + fileName, FileMode.Open))
             {
                 // Call the Deserialize method to restore the object's state.
-                temp = (List<Scontrino>)serializer.Deserialize(reader);
+                temp = (GruppoSpese)serializer.Deserialize(reader);
             }
 
             return temp;
