@@ -34,8 +34,11 @@ namespace SavePaper
             InitializeComponent();
 
             if (File.Exists("SavePaperUpdater.exe"))
-                if(File.Exists("newSavePaperUpdater.exe"))
+                if (File.Exists("newSavePaperUpdater.exe"))
+                {
                     System.Diagnostics.Process.Start("newSavePaperUpdater.exe");
+                    this.Close();
+                }
             //FileManager.startpath = @"C:\Users\Claudio\Desktop\2022 - Copia.sp";
             if (FileManager.startpath!=null)
             {
