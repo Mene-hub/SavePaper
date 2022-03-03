@@ -15,6 +15,9 @@ namespace SavePaper
         //budget del gruppo spese
         public double budget;
 
+        //per sapere se il budget è stato settato o no
+        public bool budgetSetted;
+
         //lista scontrini
         public List<Scontrino> spese;
 
@@ -33,6 +36,7 @@ namespace SavePaper
         {
             spese = spese_;
             budget = 0;
+            budgetSetted = false;
         }
 
         //metodo per aggiungere e settare il budget
@@ -44,6 +48,8 @@ namespace SavePaper
             {
                 budget += speseTotali();
             }
+
+            budgetSetted = true;
         }
 
         //metodo per il calcolo della spesa totale

@@ -117,6 +117,7 @@ namespace SavePaper
 
             string lista = TB_listaSpesa.Text;
 
+            //esempio per fix: sacchetto di pasta 5€; pomodori 10€;
             //faccio tutti i controlli per lasciare visibile il popup o il salvataggio dei file
             if (venditore != "" && movente != "" && lista != "" && ((Button)sender).Equals(AcceptPaperBT))
             {
@@ -126,8 +127,41 @@ namespace SavePaper
                         //"de serializzo" i dati inseriti nel form per creare un istanza di Scontrino
                         List<SingolaSpesa> spese_ = new List<SingolaSpesa>();
 
+                        //divido i singoli prodotti con i prezzi
+                        foreach (var prodotti in lista.Split(';'))
+                        {
+                            if (prodotti.Length > 3)
+                            {
+                                string nome = "";
+                                double prezzo = 0;
+                                foreach (var prodotto in prodotti.Split(' '))
+                                {
+                                    /*if (prodotto.ToCharArray()[0] == ' ')
+                                        prodotto.Remove(0);*/
+
+                                    if (!prodotto.Contains('€'))
+                                    {
+                                        if (prodotto.Length > 0)
+                                            nome += prodotto + " ";
+                                    }else
+                                    {
+                                        prezzo = double.Parse(prodotto.Replace("€", ""));
+                                        break;
+                                    }
+                                }
+
+                                if (prezzo == 0)
+                                {
+                                    MessageBox.Show("inserisci correttamente i prezzi");
+                                    return;
+                                }
+                                spese_.Add(new SingolaSpesa(prezzo, nome.Remove(nome.Length - 1)));
+                            }
+                        }
+
+
                         //divido il prodotto dal suo prezzo e lo aggiungo alla lista di SingolaSpesa dell scontrino
-                        for (int i = 0; i < lista.Split(' ').Length; i += 2)
+                        /*for (int i = 0; i < lista.Split(' ').Length; i += 2)
                         {
                             if (lista.Split(' ')[i + 1].Contains('€'))
                             {
@@ -136,7 +170,7 @@ namespace SavePaper
                             }
                             else
                                 throw new Exception("errore nell'inserimento dei prezzi");
-                        }
+                        }*/
 
                         //aggiungo lo scontrino
                         spese.spese.Add(new Scontrino(TB_Movente.Text, TB_Venditore.Text, DP_Date.SelectedDate.Value, spese.spese.Count));
@@ -208,14 +242,14 @@ namespace SavePaper
         //evento richiamato dalla 
         private void updatePaperlist(object sender, SelectionChangedEventArgs e)
         {
+            spese = new GruppoSpese(new List<Scontrino>());
+
             if (PapersList.SelectedItem != null)
             {
                 spese.nome = PapersList.SelectedItem.ToString();
                 spese = FileManager.loadScontrini(PapersList.SelectedItem.ToString());
                 spese.spese.Sort((x, y) => x.dataAcquisto.CompareTo(y.dataAcquisto));
             }
-            else
-                spese = new GruppoSpese();
 
             updateListBox();
             clearPaper();
@@ -339,8 +373,9 @@ namespace SavePaper
         //evento per la visualizzazione del form dei settaggi
         private void OpenSettings(object sender, RoutedEventArgs e)
         {
-
             SettingsGrid.Visibility = Visibility.Visible;
+            if(spese.budgetSetted)
+                TB_Budget.Text = spese.budget + "€";
         }
 
         //evento per la chiusura/salvataggio dei settings
@@ -399,7 +434,13 @@ namespace SavePaper
         //metodo usato per aggiornare il budget all'aggiunta di uno scontrino
         private void updateBudget()
         {
-            BudgetLB.Content = "Budget: " + (spese.budget - spese.speseTotali()) + "€";
+            BudgetView.Visibility = Visibility.Hidden;
+            if (spese.budgetSetted)
+            {
+                BudgetLB.Content = "Budget: " + (spese.budget - spese.speseTotali()) + "€";
+                BudgetView.Visibility = Visibility.Visible;
+
+            }
         }
     }
 }
