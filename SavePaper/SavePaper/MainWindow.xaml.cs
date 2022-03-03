@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -32,6 +33,9 @@ namespace SavePaper
         {
             InitializeComponent();
 
+            if (File.Exists("SavePaperUpdater.exe"))
+                if(File.Exists("newSavePaperUpdater.exe"))
+                    System.Diagnostics.Process.Start("newSavePaperUpdater.exe");
             //FileManager.startpath = @"C:\Users\Claudio\Desktop\2022 - Copia.sp";
             if (FileManager.startpath!=null)
             {
@@ -255,13 +259,13 @@ namespace SavePaper
 
             string mypath;
 
-            if (FileManager.startpath != null)
-                mypath = FileManager.startpath;
-            else
-                mypath = FileManager.path + PapersList.SelectedItem.ToString() + FileManager.extension;
-
             if (PapersList.SelectedItem != null)
             {
+                if (FileManager.startpath != null)
+                    mypath = FileManager.startpath;
+                else
+                    mypath = FileManager.path + PapersList.SelectedItem.ToString() + FileManager.extension;
+
                 spese.nome = PapersList.SelectedItem.ToString();
                 spese = FileManager.loadScontrini(mypath);
                 spese.spese.Sort((x, y) => x.dataAcquisto.CompareTo(y.dataAcquisto));
@@ -377,8 +381,7 @@ namespace SavePaper
                 {
                     FileManager.deleteFile(spese.current_path);
                     myPapers = FileManager.getPapersList();
-                    PapersList.Items.Clear();
-                    updateListBox();
+                    //updateListBox();
                     PapersList.ItemsSource = myPapers;
                     PapersList.SelectedIndex = 0;
 
@@ -446,7 +449,7 @@ namespace SavePaper
 
                 if (Downloadoption == MessageBoxResult.Yes)
                 {
-                    System.Diagnostics.Process.Start("SavePaperUpdater.exe");
+                    System.Diagnostics.Process.Start("newSavePaperUpdater.exe");
                     this.Close();
                 }
             }
