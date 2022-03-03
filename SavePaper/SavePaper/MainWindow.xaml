@@ -23,7 +23,6 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-
         <!-- scontrino -->
         <materialDesign:Card 
             Grid.Column="1" Background="White" 
@@ -118,18 +117,27 @@
             <Grid.Background>
                 <SolidColorBrush Color="Black" Opacity="0.4"/>
             </Grid.Background>
-            <materialDesign:Card Width="250" Height="200" UniformCornerRadius="10">
-                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                    <Label Margin="0,5,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">Imposta un budget</Label>
-                    <TextBox x:Name="TB_Budget" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="50,0"/>
-                    <Label HorizontalAlignment="Center" Margin="0,10,0,0">solo nuovi scontrini</Label>
-                    <ToggleButton Name="Toggle_Budget"></ToggleButton>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0">
-                        <Button x:Name="closeSettingsT" Content="{materialDesign:PackIcon Close}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="Close" Margin="0,0,5,0" Background="#FFF40303" BorderBrush="#FFF40303" Foreground="#DDFFFFFF" Height="30" Width="30" HorizontalAlignment="Center" VerticalAlignment="Center" Click="closeSettings"/>
-                        <Button x:Name="AccepSettings" Content="{materialDesign:PackIcon Done}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="Icon" Margin="5,0,0,0" Foreground="#DDFFFFFF" Width="30" Height="30" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" BorderBrush="#FF0078D7" Click="closeSettings" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <materialDesign:Card Width="250" Height="200" UniformCornerRadius="10" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                        <Label Margin="0,5,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">Imposta un budget</Label>
+                        <TextBox x:Name="TB_Budget" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="50,0"/>
+                        <Label HorizontalAlignment="Center" Margin="0,10,0,0">solo nuovi scontrini</Label>
+                        <ToggleButton Name="Toggle_Budget"></ToggleButton>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0">
+                            <Button x:Name="closeSettingsT" Content="{materialDesign:PackIcon Close}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="Close" Margin="0,0,5,0" Background="#FFF40303" BorderBrush="#FFF40303" Foreground="#DDFFFFFF" Height="30" Width="30" HorizontalAlignment="Center" VerticalAlignment="Center" Click="closeSettings"/>
+                            <Button x:Name="AccepSettings" Content="{materialDesign:PackIcon Done}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="Icon" Margin="5,0,0,0" Foreground="#DDFFFFFF" Width="30" Height="30" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" BorderBrush="#FF0078D7" Click="closeSettings" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
-            </materialDesign:Card>
+                </materialDesign:Card>
+                <materialDesign:Card Width="250" Height="200" UniformCornerRadius="10" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Label>Esporta il gruppo spese</Label>
+                        <ComboBox Name="CB_ExportFile" Margin="0,10,0,0"></ComboBox>
+                        <Button x:Name="ExportSpFile_BT" Content="{materialDesign:PackIcon FileExport}" ToolTip="Icon" Margin="0,10,0,0" Foreground="#DDFFFFFF" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" BorderBrush="#FF0078D7" Click="ExportSpFile"/>
+                    </StackPanel>
+                </materialDesign:Card>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

@@ -21,6 +21,9 @@ namespace SavePaper
         //lista scontrini
         public List<Scontrino> spese;
 
+        //variabile per sapere se è un file esterno o un file interno
+        public string current_path;
+
         //costruttore
         public GruppoSpese(string nome_, List<Scontrino> spese_)
         {

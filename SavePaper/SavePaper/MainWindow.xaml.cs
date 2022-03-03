@@ -32,9 +32,18 @@ namespace SavePaper
         {
             InitializeComponent();
 
+            //FileManager.startpath = @"C:\Users\Claudio\Desktop\2022 - Copia.sp";
+            if (FileManager.startpath!=null)
+            {
+                PapersList.ItemsSource = myPapers;
+                PapersList.Items.Add(System.IO.Path.GetFileName(FileManager.startpath.Replace(FileManager.extension, "")));
+                PapersList.SelectedIndex = 0;
+                updateListBox();
+                return;
+            }
+
             FileManager.filecheck();
             CheckVersion();
-
             //controllo se ci sono dei gruppi di scontrini già salvati
             //altrimenti visualizzo il popup per l'inserimento
             if (FileManager.getPapersList().Length == 0)
@@ -188,7 +197,7 @@ namespace SavePaper
                     return;
 
                 clearPaper();
-                FileManager.salvaScontrini(spese, PapersList.SelectedItem.ToString());
+                FileManager.ExportGroup(spese, spese.current_path);
             }
             if (((Button)sender).Equals(AcceptPaperBT))
                 return;
@@ -244,10 +253,17 @@ namespace SavePaper
         {
             spese = new GruppoSpese(new List<Scontrino>());
 
+            string mypath;
+
+            if (FileManager.startpath != null)
+                mypath = FileManager.startpath;
+            else
+                mypath = FileManager.path + PapersList.SelectedItem.ToString() + FileManager.extension;
+
             if (PapersList.SelectedItem != null)
             {
                 spese.nome = PapersList.SelectedItem.ToString();
-                spese = FileManager.loadScontrini(PapersList.SelectedItem.ToString());
+                spese = FileManager.loadScontrini(mypath);
                 spese.spese.Sort((x, y) => x.dataAcquisto.CompareTo(y.dataAcquisto));
             }
 
@@ -342,7 +358,7 @@ namespace SavePaper
                     updateListBox();
 
                     //salvo la lista scontrini aggiornata
-                    FileManager.salvaScontrini(spese, PapersList.SelectedItem.ToString());
+                    FileManager.ExportGroup(spese, spese.current_path);
 
                     //svuoto l'anteprima dello scontrino sulla destra
                     clearPaperView();
@@ -359,8 +375,10 @@ namespace SavePaper
 
                 if (PapersList.Items.Count > 0)
                 {
-                    FileManager.deleteFile(PapersList.SelectedItem.ToString());
+                    FileManager.deleteFile(spese.current_path);
                     myPapers = FileManager.getPapersList();
+                    PapersList.Items.Clear();
+                    updateListBox();
                     PapersList.ItemsSource = myPapers;
                     PapersList.SelectedIndex = 0;
 
@@ -374,6 +392,9 @@ namespace SavePaper
         private void OpenSettings(object sender, RoutedEventArgs e)
         {
             SettingsGrid.Visibility = Visibility.Visible;
+
+            CB_ExportFile.ItemsSource = myPapers;
+
             if(spese.budgetSetted)
                 TB_Budget.Text = spese.budget + "€";
         }
@@ -441,6 +462,18 @@ namespace SavePaper
                 BudgetView.Visibility = Visibility.Visible;
 
             }
+        }
+
+        //metodo per il esportare il file selezionato
+        private void ExportSpFile(object sender, RoutedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(CB_ExportFile.SelectedItem.ToString()))
+            {
+                FileManager.ExportSp(CB_ExportFile.SelectedItem.ToString());
+                clearSettings();
+            }
+            else
+                MessageBox.Show("Seleziona un Gruppo scontrini da esportare", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 }

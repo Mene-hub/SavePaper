@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace SavePaper
@@ -12,11 +13,13 @@ namespace SavePaper
     //classe statica per la gestione dei file per la lettura e la scrittura delle liste di scontrini
     public static class FileManager
     {
+        public static string startpath;
+
         //path totale basato sulla posizione dell'eseguibile
         public static string path = Assembly.GetExecutingAssembly().Location + "/../spese/";
 
         //estensione dei file
-        public static string extension = ".xml";
+        public static string extension = ".sp";
 
         //metodo per il controlle dell'esistenza e crazione dei file e directory
         public static void filecheck(string fileName)
@@ -49,17 +52,18 @@ namespace SavePaper
         //metodo per de serializzare e ritornare la lista di scontrini caricata su una lista
         public static GruppoSpese loadScontrini(string fileName)
         {
-            fileName += extension;
-
-            if (File.ReadAllBytes(path + fileName).Length == 0)
-                return new GruppoSpese(new List<Scontrino>());
+            GruppoSpese temp = new GruppoSpese(new List<Scontrino>());
+            temp.current_path = fileName;
+            if (File.ReadAllBytes(fileName).Length == 0)
+                return temp;
 
             XmlSerializer serializer = new XmlSerializer(typeof(GruppoSpese));
-            GruppoSpese temp;
-            using (Stream reader = new FileStream(path + fileName, FileMode.Open))
+            
+            using (Stream reader = new FileStream(fileName, FileMode.Open))
             {
                 // Call the Deserialize method to restore the object's state.
                 temp = (GruppoSpese)serializer.Deserialize(reader);
+                temp.current_path = fileName;
             }
 
             return temp;
@@ -81,13 +85,13 @@ namespace SavePaper
         }
 
         //metodo per la cancellazione del file contenente il gruppo di scontrini
-        public static void deleteFile(string fileName)
+        public static void deleteFile(string filePath)
         {
-            string myfile = path + fileName + extension;
-            if (File.Exists(myfile))
-                File.Delete(myfile);
+            if (File.Exists(filePath))
+                File.Delete(filePath);
 
-            ExcelManager.deleteFile(path + fileName);
+            //da fixare
+            //ExcelManager.deleteFile(path + filePath);
         }
 
         //metodo per il salvataggio del file excel (useless)
@@ -96,5 +100,28 @@ namespace SavePaper
             ExcelManager.saveExcel(scontrini, path, fileName);
         }
 
+        public static void ExportSp(string fileName)
+        {
+            GruppoSpese tmp = loadScontrini(path + fileName + extension);
+            using (var fbs = new FolderBrowserDialog())
+            {
+                DialogResult result = fbs.ShowDialog();
+                if(result == DialogResult.OK)
+                {
+                    string oldFile = path + fileName + extension;
+                    string ExportFile = fbs.SelectedPath + "\\" + fileName + extension;
+                    ExportGroup(tmp, ExportFile);
+                }
+            }
+        }
+
+        public static void ExportGroup(GruppoSpese scontrini, string filepath)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(GruppoSpese));
+            TextWriter writer = new StreamWriter(filepath);
+
+            serializer.Serialize(writer, scontrini);
+            writer.Close();
+        }
     }
 }
