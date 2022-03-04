@@ -161,7 +161,8 @@ namespace SavePaper
                                             nome += prodotto + " ";
                                     }else
                                     {
-                                        prezzo = double.Parse(prodotto.Replace("€", ""));
+                                        string prodotto_ = prodotto.Replace(".", ",");
+                                        prezzo = double.Parse(prodotto_.Replace("€", ""));
                                         break;
                                     }
                                 }
@@ -471,7 +472,6 @@ namespace SavePaper
         private void ExportSpFile(object sender, RoutedEventArgs e)
         {
             FileManager.ExportSp(spese.current_path);
-            clearSettings();
         }
     }
 }
