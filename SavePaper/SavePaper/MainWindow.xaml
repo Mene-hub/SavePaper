@@ -52,13 +52,14 @@
         <ComboBox HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FFECECEC" Foreground="#DD000000" FontWeight="Bold" Name="PapersList" SelectionChanged="updatePaperlist">
         </ComboBox>
         <ListBox HorizontalContentAlignment="Center" Background="#FFECECEC" Grid.Row="1" Name="PaperList" Height="378"/>
-        <StackPanel Grid.Row="1" Height="50" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,10,0,0">
-            <Button x:Name="GroupSettingsBT" Grid.Row="1" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon Settings}" Margin="10,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Center" BorderBrush="{x:Null}" BorderThickness="0" Foreground="#DD000000" Click="OpenSettings" ToolTip="Cancella gruppo scontrini" Background="White" Width="30" Height="30" Panel.ZIndex="99"/>
+        <Button x:Name="ExportBT" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon Export}" Margin="10,0,0,60" HorizontalAlignment="Left" VerticalAlignment="Bottom" BorderBrush="{x:Null}" BorderThickness="0" Foreground="#DDFFFFFF" Click="ExportSpFile" ToolTip="Esporta Gruppo" Background="#FF363636" Width="30" Height="30" Panel.ZIndex="99" Grid.Row="1"/>
+        <StackPanel Grid.Row="1" Height="50" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0" HorizontalAlignment="Left">
+            <Button x:Name="GroupSettingsBT" Grid.Row="1" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon Euro}" Margin="10,0,0,10" HorizontalAlignment="Right" VerticalAlignment="Center" BorderBrush="{x:Null}" BorderThickness="0" Foreground="#DDFFFFFF" Click="OpenSettings" ToolTip="Setta un Budget" Background="#FFFFC500" Width="30" Height="30" Panel.ZIndex="99"/>
             <materialDesign:Card x:Name="BudgetView" Grid.Row="1" Height="30" Width="150" Background="White" UniformCornerRadius="15" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="-30,0,0,10" Visibility="Hidden">
                 <Label Name="BudgetLB" HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="Bold" Margin="35,1,0,0">Budget: 0€</Label>
             </materialDesign:Card>
         </StackPanel>
-        <StackPanel VerticalAlignment="Bottom" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+        <StackPanel VerticalAlignment="Bottom" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0">
             <Button x:Name="DeletePapersBT" Grid.Row="1" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon Minus}" Margin="0,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Center" BorderBrush="{x:Null}" BorderThickness="0" Foreground="#DDFFFFFF" Click="DeletePapersBT_Click" ToolTip="Cancella gruppo scontrini" Background="Red" Width="30" Height="30"/>
             <Button x:Name="newPapersBT" Grid.Row="1" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon Add}" Margin="0,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Center" BorderBrush="{x:Null}" BorderThickness="0" Foreground="#DD000000" Click="newPapersBT_Click" ToolTip="Nuovo gruppo scontrini" Background="White"/>
             <Button x:Name="excelBT" Grid.Row="1" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Content="{materialDesign:PackIcon MicrosoftExcel}" Margin="0,0,10,10" HorizontalAlignment="Right" Click="openWithExcel" VerticalAlignment="Center" Background="#FF00A416" BorderBrush="{x:Null}" BorderThickness="0" ToolTip="Apri con Excel"></Button>
@@ -118,7 +119,7 @@
                 <SolidColorBrush Color="Black" Opacity="0.4"/>
             </Grid.Background>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <materialDesign:Card Width="250" Height="200" UniformCornerRadius="10" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,10,0">
+                <materialDesign:Card Width="250" Height="200" UniformCornerRadius="10" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                         <Label Margin="0,5,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">Imposta un budget</Label>
                         <TextBox x:Name="TB_Budget" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="50,0"/>
@@ -128,13 +129,6 @@
                             <Button x:Name="closeSettingsT" Content="{materialDesign:PackIcon Close}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="Close" Margin="0,0,5,0" Background="#FFF40303" BorderBrush="#FFF40303" Foreground="#DDFFFFFF" Height="30" Width="30" HorizontalAlignment="Center" VerticalAlignment="Center" Click="closeSettings"/>
                             <Button x:Name="AccepSettings" Content="{materialDesign:PackIcon Done}" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" ToolTip="Icon" Margin="5,0,0,0" Foreground="#DDFFFFFF" Width="30" Height="30" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" BorderBrush="#FF0078D7" Click="closeSettings" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                         </StackPanel>
-                    </StackPanel>
-                </materialDesign:Card>
-                <materialDesign:Card Width="250" Height="200" UniformCornerRadius="10" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <Label>Esporta il gruppo spese</Label>
-                        <ComboBox Name="CB_ExportFile" Margin="0,10,0,0"></ComboBox>
-                        <Button x:Name="ExportSpFile_BT" Content="{materialDesign:PackIcon FileExport}" ToolTip="Icon" Margin="0,10,0,0" Foreground="#DDFFFFFF" Background="{DynamicResource {x:Static SystemColors.MenuHighlightBrushKey}}" BorderBrush="#FF0078D7" Click="ExportSpFile"/>
                     </StackPanel>
                 </materialDesign:Card>
             </StackPanel>

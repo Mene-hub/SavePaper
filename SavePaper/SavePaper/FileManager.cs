@@ -100,16 +100,16 @@ namespace SavePaper
             ExcelManager.saveExcel(scontrini, path, fileName);
         }
 
-        public static void ExportSp(string fileName)
+        public static void ExportSp(string filePath)
         {
-            GruppoSpese tmp = loadScontrini(path + fileName + extension);
+            GruppoSpese tmp = loadScontrini(filePath);
             using (var fbs = new FolderBrowserDialog())
             {
                 DialogResult result = fbs.ShowDialog();
                 if(result == DialogResult.OK)
                 {
-                    string oldFile = path + fileName + extension;
-                    string ExportFile = fbs.SelectedPath + "\\" + fileName + extension;
+                    string fileName = Path.GetFileName(filePath);
+                    string ExportFile = fbs.SelectedPath + "\\" + filePath;
                     ExportGroup(tmp, ExportFile);
                 }
             }

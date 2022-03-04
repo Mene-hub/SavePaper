@@ -175,19 +175,6 @@ namespace SavePaper
                             }
                         }
 
-
-                        //divido il prodotto dal suo prezzo e lo aggiungo alla lista di SingolaSpesa dell scontrino
-                        /*for (int i = 0; i < lista.Split(' ').Length; i += 2)
-                        {
-                            if (lista.Split(' ')[i + 1].Contains('€'))
-                            {
-                                spese_.Add(new SingolaSpesa(double.Parse(lista.Split(' ')[i + 1].Replace("€", "")), lista.Split(' ')[i]));
-                                updateBudget();
-                            }
-                            else
-                                throw new Exception("errore nell'inserimento dei prezzi");
-                        }*/
-
                         //aggiungo lo scontrino
                         spese.spese.Add(new Scontrino(TB_Movente.Text, TB_Venditore.Text, DP_Date.SelectedDate.Value, spese.spese.Count));
                         
@@ -399,8 +386,6 @@ namespace SavePaper
         {
             SettingsGrid.Visibility = Visibility.Visible;
 
-            CB_ExportFile.ItemsSource = myPapers;
-
             if(spese.budgetSetted)
                 TB_Budget.Text = spese.budget + "€";
         }
@@ -412,16 +397,28 @@ namespace SavePaper
             budget = budget.Replace(" ", "");
             budget = budget.Replace("€", "");
             budget = budget.Replace(".",",");
-
-            if (budget!="" && double.Parse(budget) > 0 && ((Button)sender).Equals(AccepSettings))
+            try
             {
-                spese.setBudget(double.Parse(budget), !(bool)Toggle_Budget.IsChecked);
-                updateBudget();
-                FileManager.salvaScontrini(spese, PapersList.SelectedItem.ToString());
+                if (budget != "" && double.Parse(budget) > 0 && ((Button)sender).Equals(AccepSettings))
+                {
+                    spese.setBudget(double.Parse(budget), !(bool)Toggle_Budget.IsChecked);
+                    updateBudget();
+                    FileManager.salvaScontrini(spese, PapersList.SelectedItem.ToString());
+                    //clearSettings();
+                }
+                else
+                {
+                    if (budget != "" && double.Parse(budget) == 0 && ((Button)sender).Equals(AccepSettings))
+                    {
+                        spese.budget = 0;
+                        spese.budgetSetted = false;
+                        updateBudget();
+                        FileManager.salvaScontrini(spese, PapersList.SelectedItem.ToString());
+                    }
+                }
                 clearSettings();
             }
-            else
-                clearSettings();
+            catch (Exception E) { MessageBox.Show(E.Message); }
         }
 
         //metodo per la cancellazione dei dati dal form settings
@@ -473,13 +470,8 @@ namespace SavePaper
         //metodo per il esportare il file selezionato
         private void ExportSpFile(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(CB_ExportFile.SelectedItem.ToString()))
-            {
-                FileManager.ExportSp(CB_ExportFile.SelectedItem.ToString());
-                clearSettings();
-            }
-            else
-                MessageBox.Show("Seleziona un Gruppo scontrini da esportare", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            FileManager.ExportSp(spese.current_path);
+            clearSettings();
         }
     }
 }
