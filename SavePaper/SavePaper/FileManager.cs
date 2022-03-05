@@ -117,12 +117,6 @@ namespace SavePaper
 
         public static void ExportGroup(GruppoSpese scontrini, string filepath)
         {
-            if (File.Exists(filepath))
-                if (MessageBox.Show("esiste già un file con lo stesso nome, vuoi cancellarlo?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                    File.Delete(filepath);
-                else
-                    return;
-
             XmlSerializer serializer = new XmlSerializer(typeof(GruppoSpese));
             TextWriter writer = new StreamWriter(filepath);
 
