@@ -6,13 +6,16 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
@@ -23,6 +26,27 @@ namespace SavePaper
 {
     public partial class MainWindow : Window
     {
+
+        #region Win32 API region
+
+        // Define the Win32 API methods we are going to use
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+
+        [DllImport("user32.dll")]
+        private static extern bool InsertMenu(IntPtr hMenu, Int32 wPosition, Int32 wFlags, Int32 wIDNewItem, string lpNewItem);
+
+        /// Define our Constants we will use
+        public const Int32 WM_SYSCOMMAND = 0x112;
+        public const Int32 MF_SEPARATOR = 0x800;
+        public const Int32 MF_BYPOSITION = 0x400;
+        public const Int32 MF_STRING = 0x0;
+
+        public const Int32 _ForcedUpdateSysMenuID = 1000;
+        public const Int32 _AboutSysMenuID = 1001;
+
+        #endregion
+
         //lista degli scontrini aggiunti
         GruppoSpese spese;
 
@@ -32,6 +56,8 @@ namespace SavePaper
         public MainWindow()
         {
             InitializeComponent();
+
+            this.Loaded += new RoutedEventHandler(Window1_Loaded);
 
             if (File.Exists("SavePaperUpdater.exe"))
                 if (File.Exists("newSavePaperUpdater.exe"))
@@ -473,5 +499,54 @@ namespace SavePaper
         {
             FileManager.ExportSp(spese.current_path);
         }
+
+        #region menu Management
+        public IntPtr Handle
+        {
+            get
+            {
+                return new WindowInteropHelper(this).Handle;
+            }
+        }
+
+        private void Window1_Loaded(object sender, RoutedEventArgs e)
+        {
+            /// Get the Handle for the Forms System Menu
+            IntPtr systemMenuHandle = GetSystemMenu(this.Handle, false);
+
+            /// Create our new System Menu items just before the Close menu item
+            InsertMenu(systemMenuHandle, 5, MF_BYPOSITION | MF_SEPARATOR, 0, string.Empty); // <-- Add a menu seperator
+            InsertMenu(systemMenuHandle, 6, MF_BYPOSITION, _ForcedUpdateSysMenuID, "Forced Update...");
+            InsertMenu(systemMenuHandle, 7, MF_BYPOSITION, _AboutSysMenuID, "About...");
+
+            // Attach our WndProc handler to this Window
+            HwndSource source = HwndSource.FromHwnd(this.Handle);
+            source.AddHook(new HwndSourceHook(WndProc));
+        }
+
+        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            // Check if a System Command has been executed
+            if (msg == WM_SYSCOMMAND)
+            {
+                // Execute the appropriate code for the System Menu item that was clicked
+                switch (wParam.ToInt32())
+                {
+                    case _ForcedUpdateSysMenuID:
+                        System.Diagnostics.Process.Start("newSavePaperUpdater.exe");
+                        this.Close();
+                        handled = true;
+                        break;
+                    case _AboutSysMenuID:
+                        Process.Start("https://github.com/Mene-hub");
+                        handled = true;
+                        break;
+                }
+            }
+
+            return IntPtr.Zero;
+        }
     }
+
+    #endregion
 }

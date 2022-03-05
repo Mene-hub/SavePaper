@@ -133,5 +133,6 @@
                 </materialDesign:Card>
             </StackPanel>
         </Grid>
+        <Label FontSize="7" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="1">SavePaper Developed by Menegotto Claudio</Label>
     </Grid>
 </Window>
