@@ -49,6 +49,7 @@ namespace SavePaper
 
         //lista degli scontrini aggiunti
         GruppoSpese spese;
+        bool sortype = true;
 
         string[] myPapers;
 
@@ -113,6 +114,8 @@ namespace SavePaper
 
                 PaperList.Items.Add(labelItem);
             }
+
+            sortPapers();
         }
 
         //evento causato dalla selezione di uno scontrino dalla list box
@@ -285,7 +288,7 @@ namespace SavePaper
 
                 spese.nome = PapersList.SelectedItem.ToString();
                 spese = FileManager.loadScontrini(mypath);
-                spese.spese.Sort((x, y) => x.dataAcquisto.CompareTo(y.dataAcquisto));
+                sortPapers();
             }
 
             updateListBox();
@@ -546,7 +549,28 @@ namespace SavePaper
 
             return IntPtr.Zero;
         }
-    }
+        #endregion
 
-    #endregion
+        //evento del bottone di sotr
+        private void changeSort(object sender, MouseButtonEventArgs e)
+        {
+            if (sortype)
+                SortBT.Content = "Data Decrescente ↑↓";
+            else
+                SortBT.Content = "Data Crescente ↑↓";
+
+            sortype = !sortype;
+
+            updateListBox();
+        }
+
+        //metodo per fare il sort della lista degli scontrini
+        private void sortPapers()
+        {
+            if (sortype)
+                spese.spese.Sort((x, y) => x.dataAcquisto.CompareTo(y.dataAcquisto));
+            else
+                spese.spese.Sort((x, y) => y.dataAcquisto.CompareTo(x.dataAcquisto));
+        }
+    }
 }
