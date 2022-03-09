@@ -21,6 +21,7 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CusomMessageBox;
 
 namespace SavePaper
 {
@@ -198,7 +199,7 @@ namespace SavePaper
 
                                 if (prezzo == 0)
                                 {
-                                    MessageBox.Show("inserisci correttamente i prezzi");
+                                    MaterialMessageBox.Show("inserisci correttamente i prezzi");
                                     return;
                                 }
                                 spese_.Add(new SingolaSpesa(prezzo, nome.Remove(nome.Length - 1)));
@@ -213,7 +214,7 @@ namespace SavePaper
                         updateListBox();
                         AddPaper.Visibility = Visibility.Hidden;
                     }
-                    catch (Exception E) { MessageBox.Show("errore nell'inserimento dei dati: " + E.Message); return; }
+                    catch (Exception E) { MaterialMessageBox.Show("errore nell'inserimento dei dati: " + E.Message); return; }
 
                 }
                 else
@@ -239,7 +240,7 @@ namespace SavePaper
                 {
                     totSpesa += item.totCost();
                 }
-                MessageBox.Show("spesa totale: " + totSpesa + "€");
+                MaterialMessageBox.Show("spesa totale: " + totSpesa + "€");
             }
         }
 
@@ -263,12 +264,12 @@ namespace SavePaper
                         Process.Start(fileName);
                     }
                     catch (Exception E) {
-                        if (MessageBox.Show("impossibile aprire il file, vuoi provare a visualizzarlo qui?", "Attenzione", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                        if (MaterialMessageBox.Show("impossibile aprire il file, vuoi provare a visualizzarlo qui?", "Attenzione", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                             new ExcelOpener(fileName).ShowDialog();
                     }
                 }
                 else
-                    MessageBox.Show("non ci sono scontrini da visualizzare", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MaterialMessageBox.Show("non ci sono scontrini da visualizzare", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -371,7 +372,7 @@ namespace SavePaper
         private void RemovePaper(object sender, RoutedEventArgs e)
         {
             //popup son la conferma SI/NO
-            if (MessageBox.Show("sei sicuro di voler cancellare lo scontrino?", "Attenzione", MessageBoxButton.YesNo, MessageBoxImage.Warning)==MessageBoxResult.Yes) {
+            if (MaterialMessageBox.Show("sei sicuro di voler cancellare lo scontrino?", "Attenzione", MessageBoxButton.YesNo, MessageBoxImage.Warning)==MessageBoxResult.Yes) {
                 if (PapersList.Items.Count > 0 && PapersList.SelectedIndex >= 0)
                 {
                     //rimuovo dalla lista di scontrini l'istanza riferita allo scontrino selezionato
@@ -394,7 +395,7 @@ namespace SavePaper
         private void DeletePapersBT_Click(object sender, RoutedEventArgs e)
         {
             //popup son la conferma SI/NO
-            if (MessageBox.Show("sei sicuro di voler cancellare il gruppo scontrini?", "Attenzione", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (MaterialMessageBox.Show("sei sicuro di voler cancellare il gruppo scontrini?", "Attenzione", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
 
                 if (PapersList.Items.Count > 0)
@@ -448,7 +449,7 @@ namespace SavePaper
                 }
                 clearSettings();
             }
-            catch (Exception E) { MessageBox.Show(E.Message); }
+            catch (Exception E) { MaterialMessageBox.Show(E.Message); }
         }
 
         //metodo per la cancellazione dei dati dal form settings
@@ -475,7 +476,7 @@ namespace SavePaper
 
             if (projectVersion != tmp)
             {
-                var Downloadoption = System.Windows.MessageBox.Show("C'è una nuova versione!\nvuoi scaricarla?", "Update " + tmp, MessageBoxButton.YesNo);
+                var Downloadoption = MaterialMessageBox.Show("C'è una nuova versione!\nvuoi scaricarla?", "Update " + tmp, MessageBoxButton.YesNo);
 
                 if (Downloadoption == MessageBoxResult.Yes)
                 {

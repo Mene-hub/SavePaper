@@ -10,6 +10,7 @@ using System.Data;
 using System.Drawing;
 using System.Data.SqlClient;
 using Aspose.Cells;
+using CusomMessageBox;
 
 namespace SavePaper
 {
@@ -166,7 +167,7 @@ namespace SavePaper
             catch (Exception e)
             {
                 //nel caso il file sia già aperto in Excel il programma non potrebbe aprirlo perciò viene notificato
-                MessageBox.Show("impossibile aprire il file aggiornato perchè già in uso da una altro programma\n" + e.Message);
+                MaterialMessageBox.Show("impossibile aprire il file aggiornato perchè già in uso da una altro programma\n" + e.Message);
             }
         }
 

@@ -6,18 +6,6 @@
     <Scontrino>
       <scontrino>
         <SingolaSpesa>
-          <costo>55</costo>
-          <nome>segseg</nome>
-        </SingolaSpesa>
-      </scontrino>
-      <movente>gsgsg</movente>
-      <venditore>segsegseg</venditore>
-      <dataAcquisto>2022-03-04T00:00:00</dataAcquisto>
-      <id>0</id>
-    </Scontrino>
-    <Scontrino>
-      <scontrino>
-        <SingolaSpesa>
           <costo>5.5</costo>
           <nome>eqfqf</nome>
         </SingolaSpesa>

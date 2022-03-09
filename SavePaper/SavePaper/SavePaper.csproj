@@ -62,8 +62,8 @@
     <Reference Include="Aspose.Cells, Version=22.2.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
       <HintPath>..\packages\Aspose.Cells.22.2.0\lib\net40\Aspose.Cells.dll</HintPath>
     </Reference>
-    <Reference Include="IronXL, Version=2021.12.0.0, Culture=neutral, PublicKeyToken=0f5804b6690bad1e, processorArchitecture=MSIL">
-      <HintPath>..\packages\IronXL.Excel.2021.12.0\lib\net45\IronXL.dll</HintPath>
+    <Reference Include="CusomMessageBox">
+      <HintPath>M:\progetti git hub\MaterialMessageBox\MaterialMessageBox\CusomMessageBox\bin\Debug\CusomMessageBox.dll</HintPath>
     </Reference>
     <Reference Include="MaterialDesignColors, Version=2.0.4.3, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.2.0.4\lib\net452\MaterialDesignColors.dll</HintPath>

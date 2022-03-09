@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using CusomMessageBox;
 
 namespace SavePaper
 {
@@ -21,7 +22,7 @@ namespace SavePaper
                     FileManager.startpath = e.Args[0];
                 else
                 {
-                    MessageBox.Show("questo file non è compatibile", "Errore nell'apertura del file", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MaterialMessageBox.Show("questo file non è compatibile", "Errore nell'apertura del file", MessageBoxButton.OK, MessageBoxImage.Error);
                     System.Environment.Exit(1);
                 }
 
