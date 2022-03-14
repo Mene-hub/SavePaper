@@ -2,11 +2,9 @@ C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\SavePape
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\SavePaper.exe
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\SavePaper.pdb
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\Aspose.Cells.dll
-C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\IronXL.dll
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\MaterialDesignColors.dll
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\MaterialDesignThemes.Wpf.dll
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\Aspose.Cells.xml
-C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\IronXL.xml
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\MaterialDesignColors.pdb
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\MaterialDesignThemes.Wpf.pdb
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\MaterialDesignThemes.Wpf.xml
@@ -29,3 +27,5 @@ C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\obj\Release\SavePape
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\obj\Release\SavePaper.pdb
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\Newtonsoft.Json.dll
 C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\Newtonsoft.Json.xml
+C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\CusomMessageBox.dll
+C:\Users\Claudio\source\repos\SavePaper\SavePaper\SavePaper\bin\Release\CusomMessageBox.pdb
