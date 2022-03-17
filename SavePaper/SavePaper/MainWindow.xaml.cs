@@ -100,6 +100,7 @@ namespace SavePaper
             ListBoxItem labelItem;
             PaperList.Items.Clear();
             updateBudget();
+            sortPapers();
             foreach (var item in spese.spese)
             {
                 labelItem = new ListBoxItem();
@@ -115,8 +116,6 @@ namespace SavePaper
 
                 PaperList.Items.Add(labelItem);
             }
-
-            sortPapers();
         }
 
         //evento causato dalla selezione di uno scontrino dalla list box
